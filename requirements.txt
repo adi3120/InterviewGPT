@@ -8,3 +8,4 @@ gTTS
 playsound    
 pyttsx3
 audio-recorder-streamlit
+pdf2image
