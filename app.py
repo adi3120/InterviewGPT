@@ -4,7 +4,6 @@ from pathlib import Path
 import json
 from unstructured.partition.pdf import partition_pdf
 from LangchainHandler import *
-import temporary_data
 from WeaviateHandler import *
 from TextToSpeech import *
 from st_audiorec import st_audiorec
