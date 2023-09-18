@@ -6,7 +6,6 @@ from unstructured.partition.pdf import partition_pdf
 from LangchainHandler import *
 from WeaviateHandler import *
 from TextToSpeech import *
-from st_audiorec import st_audiorec
 from AssemblyAIHandler import *
 from audio_recorder_streamlit import audio_recorder
 import io
