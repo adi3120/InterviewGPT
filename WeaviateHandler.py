@@ -48,6 +48,10 @@ class WeaviateHandler:
                     .with_limit(1)
                 )
                 response = response.do()
+                if response and response.get("code") == 429:
+                    # Rate limit exceeded, show an error message to the user
+                    st.error("Rate limit exceeded. Please try again later.")
+                    return
 
                 if response:
                     for k in response["data"]["Get"]["Questionnew"]:
@@ -58,7 +62,7 @@ class WeaviateHandler:
                     question_topics.add(concept)
                 time.sleep(20)
             except Exception as e:
-                st.error(f"An error occurred while fetching questions: {str(e)}")
+                st.error(f"An error occurred while fetching questions: {str(e)} Probably your OpenAI API Rate limit exceeded!!")
 
         if "work_experience" in data:
             with st.spinner("Fetching questions based on your work experience..."):
