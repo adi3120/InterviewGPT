@@ -16,6 +16,7 @@ st.header("🦜🔗 Langchain, ✨ Weaviate")
 
 with st.sidebar:
     st.title("Easy Configure")
+    open_ai_key=st.text_input("Enter your OpenAI API Key")
     resume=st.file_uploader("Upload your resume📄",type=["pdf"])
     submit=st.button("Extract Data")
 
@@ -84,133 +85,136 @@ def display_dashboard(data):
             
 if submit:
     if resume:
-        langchainHandler=LangchainHandler()
-        with open("resume.pdf","wb") as f:
-            f.write(resume.getvalue())
-        elements=partition_pdf(filename="resume.pdf")
-        text=""
-        for i in elements:
-            text+=i.text+'\n'
-        with st.spinner("Please wait Extracting Data..."):
-            data=langchainHandler.get_resume_headers(text)
-            st.sidebar.success("Data extracted")
-            # data=temporary_data.data
-            st.header("Resume - Parsed Data")
-        with st.expander("Expand to view Resume Dashboard"):
-            display_dashboard(data)
-        st.header("Interview Questions based on your resume 💻")
-        weaviateHandler=WeaviateHandler()
-        questions,answers,company,role=weaviateHandler.get_questions(data)
+        if open_ai_key:
+            langchainHandler=LangchainHandler(key=open_ai_key)
+            with open("resume.pdf","wb") as f:
+                f.write(resume.getvalue())
+            elements=partition_pdf(filename="resume.pdf")
+            text=""
+            for i in elements:
+                text+=i.text+'\n'
+            with st.spinner("Please wait Extracting Data..."):
+                data=langchainHandler.get_resume_headers(text)
+                st.sidebar.success("Data extracted")
+                # data=temporary_data.data
+                st.header("Resume - Parsed Data")
+            with st.expander("Expand to view Resume Dashboard"):
+                display_dashboard(data)
+            st.header("Interview Questions based on your resume 💻")
+            weaviateHandler=WeaviateHandler(openaikey=open_ai_key)
+            questions,answers,company,role=weaviateHandler.get_questions(data)
 
-        skill_questions=questions["skills"]
-        skill_answers=answers["skills"]
-        skill_company=company["skills"]
-        skill_role=role["skills"]
+            skill_questions=questions["skills"]
+            skill_answers=answers["skills"]
+            skill_company=company["skills"]
+            skill_role=role["skills"]
 
-        print(len(skill_questions))
-        print(len(skill_answers))
-        print(len(skill_company))
-        print(len(skill_role))
-        print("==================")
+            print(len(skill_questions))
+            print(len(skill_answers))
+            print(len(skill_company))
+            print(len(skill_role))
+            print("==================")
 
-        work_questions=questions["work_experience"]
-        work_answers=answers["work_experience"]
-        work_company=company["work_experience"]
-        work_role=role["work_experience"]
+            work_questions=questions["work_experience"]
+            work_answers=answers["work_experience"]
+            work_company=company["work_experience"]
+            work_role=role["work_experience"]
 
-        print(len(work_questions))
-        print(len(work_answers))
-        print(len(work_company))
-        print(len(work_role))
-        print("==================")
+            print(len(work_questions))
+            print(len(work_answers))
+            print(len(work_company))
+            print(len(work_role))
+            print("==================")
 
 
-        project_questions=questions["projects"]
-        project_answers=answers["projects"]
-        project_company=company["projects"]
-        project_role=role["projects"]
+            project_questions=questions["projects"]
+            project_answers=answers["projects"]
+            project_company=company["projects"]
+            project_role=role["projects"]
 
-        print(len(project_questions))
-        print(len(project_answers))
-        print(len(project_company))
-        print(len(project_role))
-        print("==================")
+            print(len(project_questions))
+            print(len(project_answers))
+            print(len(project_company))
+            print(len(project_role))
+            print("==================")
 
-        certificate_questions=questions["certificates"]
-        certificate_answers=answers["certificates"]
-        certificate_company=company["certificates"]
-        certificate_role=role["certificates"]
+            certificate_questions=questions["certificates"]
+            certificate_answers=answers["certificates"]
+            certificate_company=company["certificates"]
+            certificate_role=role["certificates"]
 
+            
+            print(len(certificate_questions))
+            print(len(certificate_answers))
+            print(len(certificate_company))
+            print(len(certificate_role))
+            print("==================")
+
+            st.header("Based on Skills ⚙️")
+            n=len(skill_questions)+len(work_questions)+len(project_questions)+len(certificate_questions)
+            buttons=[0]*n
+            nb=0
+            assemblyAIHandler=AssemblyAIHandler()
+
+            for i in range(len(skill_questions)):
+                st.write(skill_questions[i])
+                text2speech(skill_questions[i])
+                audio_file = open('voice.mp3', 'rb')
+                audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format='audio/mp3')                
+                st.write("Asked in : ",skill_company[i])
+                st.write("Role : ",skill_role[i])
+
+                with st.expander("View Answer"):
+                    st.write(skill_answers[i])
+                st.markdown("<hr>", unsafe_allow_html=True)
+                nb+=1
+
+            st.header("Based on Work-experience 🏢")
+            for i in range(len(work_questions)):
+                st.write(work_questions[i])
+                text2speech(work_questions[i])
+                audio_file = open('voice.mp3', 'rb')
+                audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format='audio/mp3')
+                st.write("Asked in : ",work_company[i])
+                st.write("Role : ",work_role[i])
+                with st.expander("View Answer"):
+                    st.write(work_answers[i])
+                st.markdown("<hr>", unsafe_allow_html=True)
+                nb+=1
+
+            st.header("Based on Project👨‍💻")
+            for i in range(len(project_questions)):
+                st.write(project_questions[i])
+                text2speech(project_questions[i])
+                audio_file = open('voice.mp3', 'rb')
+                audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format='audio/mp3')
+                st.write("Asked in : ",project_company[i])
+                st.write("Role : ",project_role[i])
+                with st.expander("View Answer"):
+                    st.write(project_answers[i])
         
-        print(len(certificate_questions))
-        print(len(certificate_answers))
-        print(len(certificate_company))
-        print(len(certificate_role))
-        print("==================")
+                st.markdown("<hr>", unsafe_allow_html=True)
+                nb+=1
 
-        st.header("Based on Skills ⚙️")
-        n=len(skill_questions)+len(work_questions)+len(project_questions)+len(certificate_questions)
-        buttons=[0]*n
-        nb=0
-        assemblyAIHandler=AssemblyAIHandler()
+            st.header("Based on Certificates📜")
+            for i in range(len(certificate_questions)):
+                st.write(certificate_questions[i])
+                text2speech(certificate_questions[i])
+                audio_file = open('voice.mp3', 'rb')
+                audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format='audio/mp3')
+                st.write("Asked in : ",certificate_company[i])
+                st.write("Role : ",certificate_role[i])
+                with st.expander("View Answer"):
+                    st.write(certificate_answers[i])
 
-        for i in range(len(skill_questions)):
-            st.write(skill_questions[i])
-            text2speech(skill_questions[i])
-            audio_file = open('voice.mp3', 'rb')
-            audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format='audio/mp3')                
-            st.write("Asked in : ",skill_company[i])
-            st.write("Role : ",skill_role[i])
-
-            with st.expander("View Answer"):
-                st.write(skill_answers[i])
-            st.markdown("<hr>", unsafe_allow_html=True)
-            nb+=1
-
-        st.header("Based on Work-experience 🏢")
-        for i in range(len(work_questions)):
-            st.write(work_questions[i])
-            text2speech(work_questions[i])
-            audio_file = open('voice.mp3', 'rb')
-            audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format='audio/mp3')
-            st.write("Asked in : ",work_company[i])
-            st.write("Role : ",work_role[i])
-            with st.expander("View Answer"):
-                st.write(work_answers[i])
-            st.markdown("<hr>", unsafe_allow_html=True)
-            nb+=1
-
-        st.header("Based on Project👨‍💻")
-        for i in range(len(project_questions)):
-            st.write(project_questions[i])
-            text2speech(project_questions[i])
-            audio_file = open('voice.mp3', 'rb')
-            audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format='audio/mp3')
-            st.write("Asked in : ",project_company[i])
-            st.write("Role : ",project_role[i])
-            with st.expander("View Answer"):
-                st.write(project_answers[i])
-    
-            st.markdown("<hr>", unsafe_allow_html=True)
-            nb+=1
-
-        st.header("Based on Certificates📜")
-        for i in range(len(certificate_questions)):
-            st.write(certificate_questions[i])
-            text2speech(certificate_questions[i])
-            audio_file = open('voice.mp3', 'rb')
-            audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format='audio/mp3')
-            st.write("Asked in : ",certificate_company[i])
-            st.write("Role : ",certificate_role[i])
-            with st.expander("View Answer"):
-                st.write(certificate_answers[i])
-
-            st.markdown("<hr>", unsafe_allow_html=True)
-            nb+=1
+                st.markdown("<hr>", unsafe_allow_html=True)
+                nb+=1
+        else:
+            st.error("Please enter your OpenAI API key")
 
     else:
         st.error("Please upload resume")
