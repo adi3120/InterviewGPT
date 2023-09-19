@@ -109,46 +109,21 @@ if submit:
             skill_company=company["skills"]
             skill_role=role["skills"]
 
-            print(len(skill_questions))
-            print(len(skill_answers))
-            print(len(skill_company))
-            print(len(skill_role))
-            print("==================")
-
             work_questions=questions["work_experience"]
             work_answers=answers["work_experience"]
             work_company=company["work_experience"]
             work_role=role["work_experience"]
-
-            print(len(work_questions))
-            print(len(work_answers))
-            print(len(work_company))
-            print(len(work_role))
-            print("==================")
-
 
             project_questions=questions["projects"]
             project_answers=answers["projects"]
             project_company=company["projects"]
             project_role=role["projects"]
 
-            print(len(project_questions))
-            print(len(project_answers))
-            print(len(project_company))
-            print(len(project_role))
-            print("==================")
-
             certificate_questions=questions["certificates"]
             certificate_answers=answers["certificates"]
             certificate_company=company["certificates"]
             certificate_role=role["certificates"]
 
-            
-            print(len(certificate_questions))
-            print(len(certificate_answers))
-            print(len(certificate_company))
-            print(len(certificate_role))
-            print("==================")
 
             st.header("Based on Skills ⚙️")
             n=len(skill_questions)+len(work_questions)+len(project_questions)+len(certificate_questions)
