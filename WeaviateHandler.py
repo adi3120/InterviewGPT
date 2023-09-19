@@ -43,10 +43,8 @@ class WeaviateHandler:
 			with st.spinner("Fetching questions based on your work experience..."):
 				for i in data["work_experience"]:
 					concept=""
-					if "company_name" in i:
-						concept+=i["company_name"]
 					if "job_title" in i:
-						concept+='\n'+i["job_title"]
+						concept+=i["job_title"]
 					if concept not in question_topics:
 						response = (
 							self.client.query
