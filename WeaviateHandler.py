@@ -56,6 +56,7 @@ class WeaviateHandler:
 						)
 						response=response.do()
 						if response:
+							st.write(response)
 							for k in response["data"]["Get"]["Questionnew"]:
 								questions["work_experience"].append(k["question"])
 								answers["work_experience"].append(k["answer"])
