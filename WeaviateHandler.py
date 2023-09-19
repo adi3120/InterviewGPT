@@ -48,10 +48,6 @@ class WeaviateHandler:
                     .with_limit(1)
                 )
                 response = response.do()
-                if response and response.get("code") == 429:
-                    # Rate limit exceeded, show an error message to the user
-                    st.error("Rate limit exceeded. Please try again later.")
-                    return
 
                 if response:
                     for k in response["data"]["Get"]["Questionnew"]:
