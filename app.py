@@ -10,19 +10,14 @@ from AssemblyAIHandler import *
 from audio_recorder_streamlit import audio_recorder
 import io
 
-
-
 st.set_page_config(layout="wide")
 st.title("InterviewGPT")
 st.header("🦜🔗 Langchain, ✨ Weaviate")
+
 with st.sidebar:
     st.title("Easy Configure")
     resume=st.file_uploader("Upload your resume📄",type=["pdf"])
     submit=st.button("Extract Data")
-
-def interview_practise(data):
-    st.title("Interview and Practise")
-
 
 def display_dashboard(data):
     st.title("Resume Data")
@@ -86,15 +81,7 @@ def display_dashboard(data):
     if "skills" in data:
         for i in data["skills"]:
             st.write(i)
-
-def convert_speech_to_text():
-    audio_bytes = audio_recorder()
-    s = io.BytesIO(audio_bytes)
-    with open("myrecord.wav","wb") as f:
-        f.write(s.getvalue())
-    text=assemblyAIHandler.speech_to_text()
-    st.write("Your Answer: ",text)
-
+            
 if submit:
     if resume:
         langchainHandler=LangchainHandler()
