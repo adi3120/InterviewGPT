@@ -2,43 +2,43 @@ import weaviate
 import time
 import streamlit as st
 class WeaviateHandler:
-	def __init__(self,weaviatekey=st.secrets["WEAVIATE_KEY"],openaikey=st.secrets["OPENAI_KEY"]):
-		self.auth_config = weaviate.AuthApiKey(api_key=weaviatekey)
-		self.client = weaviate.Client(
-			url="https://questionsdatabase-lzn96801.weaviate.network",
-			auth_client_secret=self.auth_config,
-			additional_headers={
-				"X-OpenAI-Api-Key": openaikey,
-			}
-		)
-	def get_questions(self,data):
+    def __init__(self,weaviatekey=st.secrets["WEAVIATE_KEY"],openaikey=st.secrets["OPENAI_KEY"]):
+        self.auth_config = weaviate.AuthApiKey(api_key=weaviatekey)
+        self.client = weaviate.Client(
+            url="https://questionsdatabase-lzn96801.weaviate.network",
+            auth_client_secret=self.auth_config,
+            additional_headers={
+                "X-OpenAI-Api-Key": openaikey,
+            }
+        )
+    def get_questions(self,data):
 
-		questions={
-			"skills":[],
-			"work_experience":[],
-			"projects":[],
-			"certificates":[],
-		}
-		answers={
-			"skills":[],
-			"work_experience":[],
-			"projects":[],
-			"certificates":[],
-		}
-		company={
-			"skills":[],
-			"work_experience":[],
-			"projects":[],
-			"certificates":[],
-		}
-		role={
-			"skills":[],
-			"work_experience":[],
-			"projects":[],
-			"certificates":[],
-		}
-		question_topics = set()
-
+        questions={
+            "skills":[],
+            "work_experience":[],
+            "projects":[],
+            "certificates":[],
+        }
+        answers={
+            "skills":[],
+            "work_experience":[],
+            "projects":[],
+            "certificates":[],
+        }
+        company={
+            "skills":[],
+            "work_experience":[],
+            "projects":[],
+            "certificates":[],
+        }
+        role={
+            "skills":[],
+            "work_experience":[],
+            "projects":[],
+            "certificates":[],
+        }
+        question_topics = set()
+        
         def fetch_questions_from_concept(concept, category):
             try:
                 response = (
