@@ -5,7 +5,7 @@ class WeaviateHandler:
     def __init__(self,weaviatekey=st.secrets["WEAVIATE_KEY"],openaikey=st.secrets["OPENAI_KEY"]):
         self.auth_config = weaviate.AuthApiKey(api_key=weaviatekey)
         self.client = weaviate.Client(
-            url="https://questionsdatabase-lzn96801.weaviate.network",
+            url="https://questionsdb-y4chqhq5.weaviate.network",
             auth_client_secret=self.auth_config,
             additional_headers={
                 "X-OpenAI-Api-Key": openaikey,
